@@ -2,31 +2,21 @@
 
 
 
-**NOTE:**
+**TLDR**: This tutorial covers how to set up Deeplab within Tensorflow to train your own machine learning model, with a focus on separating humans from the background of a photograph in order to perform background replacement. 
 
-This tutorial and repo were created through my difficulties installing and training deeplab, in the hopes that it would make things easier for others trying to do the same. Very little of the code is my own, and has been assembled from a variety of sources - all of which were extremely helpful, but none of which I was able to follow on their own in order to successfully train Deeplab. By combining various pieces of the following links, I was able to create a process that worked smoothly for me. 
+There are 3 parts to the tutorial. Feel free to skip to the section that is most relevant to you.
+
+* Part 1 focuses on collecting a dataset. 
+* Part 2 focuses on training Deeplab on your dataset
+* Part 3 focuses on visualizing the results of the training, and performing background replacement using openCV.
 
 
 
-**Links**:
-
-[Analytics Vidhya](https://www.analyticsvidhya.com/blog/2019/02/tutorial-semantic-segmentation-google-deeplab/#comment-157463) - *Semantic Segmentation: Introduction to the Deep Learning Technique Behind Google Pixel’s Camera!,* Saurabh Pal
-
-[Installing Tensorflow](https://www.tensorflow.org/install/) - Official Documentation
-
-[Installing Deeplab](https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/installation.md) - Official Documentation
-
-[Tensorflow-Deeplab-Resnet](https://github.com/DrSleep/tensorflow-deeplab-resnet) - Dr. Sleep
-
-[Free Code Camp](https://medium.com/free-code-camp/how-to-use-deeplab-in-tensorflow-for-object-segmentation-using-deep-learning-a5777290ab6b) - *How to use DeepLab in TensorFlow for object segmentation using Deep Learning*, Beeren Sahu
-
-[Dataset Utils](https://github.com/ml4a/ml4a-guides/tree/master/utils) - Gene Kogan - useful in scraping images for a dataset and creating randomly sized, scaled, and flipped images in order to increase the training set size.
+---
 
 
 
 ### Installation Process
-
-
 
 
 
@@ -565,11 +555,114 @@ To visualize the actual output of your masks, run `vis-pqr.sh` from the `models/
 
 If you want to combine these two images, the `merge_segmentation` photoshop action can help. 
 
-I've also set this up as an automated process in openCV to take an image and its segmentation mask and automatically substitute in a background of your choosing, which is not covered here.
+I've also set this up as an automated process in openCV to take an image and its segmentation mask and automatically substitute in a background of your choosing.
 
 
 
 
+
+### Using OpenCV for background replacement
+
+
+
+**Install OpenCV**
+
+[Follow these directions to install opencv on mac](https://www.pyimagesearch.com/2018/08/17/install-opencv-4-on-macos/) - but use version 4.1.2 instead of 4.0:
+
+```bash
+wget -O opencv.zip https://github.com/opencv/opencv/archive/4.1.2.zip
+$ wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.1.2.zip
+```
+
+Give your virtual environment a name of cv, then `workon cv`.
+
+Rename` /usr/local/lib/python3.7/site-packages/cv2/python-3.7/cv2.cpython-37m-darwin.so` to `cv2.so`
+
+then `cd /Users/[your_username]/.virtualenvs/cv/lib/python3.7/site-packages`
+
+then `ln -s /usr/local/lib/python3.7/site-packages/cv2/python-3.7/cv2.so cv2.so`
+
+
+
+The cv Python virtual environment is ***entirely independent and sequestered*** from the default Python version on your system. Any Python packages in the *global directories* *will not* be available to the cv virtual environment. Similarly, any Python packages installed in site-packages of cv *will not* be available to the global install of Python.
+
+
+
+**Directory Structure**
+
+
+
+Navigate to the `cv` directory. You should have the following directory structure:
+
+```
++input 
++output
++masks
++bg
+replacebg_dd.py
+```
+
+
+
+* `/input`  - contains the images whose background you want to replace
+* `/masks` - contains the segmentation masks that will separate the foreground from the background (people from everything else).
+* `/output` - where the photos with the replaced background will be saved
+* `/bg` contains the background image that will be used as the replacement.
+* `replacebg_dd.py` - the python script that utilizes opencv to handle background replacement.
+
+
+
+**Note**:  all files in the input and masks directories should have the same names to ensure they match up together when running the script
+
+
+
+**Using the replacebg.py script**:
+
+
+
+ Before calling the script, check the following lines within the script:
+
+```
+input_dir = 'input/'
+output_dir = 'output/'
+mask_dir = 'masks/'
+bg_dir = 'bg/'
+bg_file = 'track.jpg'
+```
+
+These directories should match your directories relative to the `replacebg.py` script.
+
+`initial_threshold_val = 150` : Changing this value will change the black / white value above which the foreground is kept rather than the background.
+
+
+
+
+
+**Script Options**
+
+The python script is responsible for handling what pixels to keep from the source vs which to throw away, and can do some basic thresholding and blurring of the mask image to attempt to improve results.
+
+There are a few parameters you can pass the `replacebg.py` script:
+
+* `--image` (i.e. `replacebg.py --image 36`) would show (but not save) the image numbered 36
+* `--generate` (i.e. `replacebg.py --generate 20`) would save out the first 20 images
+* `--all` (`replacebg.py --all`) would save out all images (provided you manually keep the `num_inputs` variable synched with however many files you have in your input directory)
+* `replacebg.py --start 20` would generate images between the 20th and `num_inputs` photos.
+* `replacebg.py --start 20 --end 30` would generate images between the 20th and 30th photos in the directory
+
+
+
+**Keyboard commands**
+
+When you run the script and it is displaying an image, you can use the following keyboard commands:
+
+
+
+* `z` increases the threshold, tightening up on the subjects and revealing more of the substituted background
+* `x` decreases the threshold, showing more of the source photo
+* `s` saves the image out
+* `q` quits the window and script execution
+* `i` cycles to the next image in the sequence
 
 
 
@@ -578,4 +671,28 @@ I've also set this up as an automated process in openCV to take an image and its
 
 
 ---
+
+
+
+
+
+**NOTE:**
+
+This tutorial and repo were created through my difficulties installing and training deeplab, in the hopes that it would make things easier for others trying to do the same. Very little of the code is my own, and has been assembled from a variety of sources - all of which were extremely helpful, but none of which I was able to follow on their own in order to successfully train Deeplab. By combining various pieces of the following links, I was able to create a process that worked smoothly for me. 
+
+
+
+**Links**:
+
+[Analytics Vidhya](https://www.analyticsvidhya.com/blog/2019/02/tutorial-semantic-segmentation-google-deeplab/#comment-157463) - *Semantic Segmentation: Introduction to the Deep Learning Technique Behind Google Pixel’s Camera!,* Saurabh Pal
+
+[Installing Tensorflow](https://www.tensorflow.org/install/) - Official Documentation
+
+[Installing Deeplab](https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/installation.md) - Official Documentation
+
+[Tensorflow-Deeplab-Resnet](https://github.com/DrSleep/tensorflow-deeplab-resnet) - Dr. Sleep
+
+[Free Code Camp](https://medium.com/free-code-camp/how-to-use-deeplab-in-tensorflow-for-object-segmentation-using-deep-learning-a5777290ab6b) - *How to use DeepLab in TensorFlow for object segmentation using Deep Learning*, Beeren Sahu
+
+[Dataset Utils](https://github.com/ml4a/ml4a-guides/tree/master/utils) - Gene Kogan - useful in scraping images for a dataset and creating randomly sized, scaled, and flipped images in order to increase the training set size.
 
