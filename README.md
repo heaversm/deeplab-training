@@ -29,7 +29,7 @@ There are 3 parts to the tutorial. Feel free to skip to the section that is most
 
 
 ```
-/Users/heaversm/.anaconda/navigator/a.tool ; exit;
+/Users/[username]/.anaconda/navigator/a.tool ; exit;
 ```
 
 
@@ -38,7 +38,7 @@ There are 3 parts to the tutorial. Feel free to skip to the section that is most
 
 
 
-**Clone the Github Repo**
+**Clone the Deeplab Models Github Repo**
 
 [Clone the official tensorflow models repo](https://github.com/tensorflow/models) 
 
@@ -46,7 +46,7 @@ You will only need the `models/research/deeplab` and `models/research/slim` dire
 
 **Merge the files from the tutorial repo into the tensorflow models repo**
 
-[Clone or download this repo](), and put everything into the directory you just created for the tensorflow models repo. but don't overwrite anything. For example put `models/research/eval-pqr.sh` into the tensorflow `models/research` directory
+[Clone or download this repo](https://github.com/heaversm/deeplab-training), and put everything into the directory you just created for the tensorflow models repo. but don't overwrite anything. For example put `models/research/eval-pqr.sh` into the tensorflow `models/research` directory
 
 
 
@@ -80,9 +80,9 @@ pip3 install Pillow #use this for a mac. Other systems or versions of python mig
 pip3 install tqdm numpy
 ```
 
-  
 
- [more help on installing tensorflow here](https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/installation.md).
+
+[more help on installing tensorflow here](https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/installation.md).
 
 Make sure to follow the steps in the link to ensure that you can run `model_test.py`:
 
@@ -140,8 +140,6 @@ Tensorflow 1.15
 **Making a dataset**
 
 You will need a consistent background image, and a large set of transparent (or masked) foreground images with photos of people. You'll want to composite each foreground image on to the background.
-
-
 
 Make sure the background image is representative of the background image you will be using for real time photo replacement.
 
@@ -207,11 +205,11 @@ Both sets of images, the "regular" and "segmentation" images should have the sam
 
 **Regular Image**
 
-![athletes-001](./readme_images/athletes-001.jpg)
+![athletes-001](https://prototypes.mikeheavers.com/transfer/deeplab/readme_images/athletes-001.jpg)
 
 **Segmentation Image**
 
-![athletes-001](./readme_images/athletes-001.png)
+![athletes-001](https://prototypes.mikeheavers.com/transfer/deeplab/readme_images/athletes-001.png)
 
 The `photoshop actions` section below has a set of useful actions for accomplishing this properly in photoshop. 
 
@@ -231,12 +229,12 @@ To edit any of the actions, you'll want to select the step of the action from th
 
 * `place_and_save`: 
 
-  This action:
+This action:
 
-  *  takes a loaded image
-  *  resizes the canvas to the size of your background image and places that image as a layer
-  *  moves your foreground image to the bottom center of the photo
-  *  exports the image as a 60% quality jpeg.
+*  takes a loaded image
+*  resizes the canvas to the size of your background image and places that image as a layer
+*  moves your foreground image to the bottom center of the photo
+*  exports the image as a 60% quality jpeg.
 
 
 
@@ -246,31 +244,31 @@ Make sure to edit the action to specify the location of your background image, t
 
 * `segment` : 
 
-  This action:
+This action:
 
-  * Takes the transparent images and resizes the canvas to match the dimensions of your chosen background image.
-  * Aligns the transparent foreground image to the bottom center of the canvas.
-  * Makes a background and fills it with black (the segmentation color for `background` in deeplab)
-  * Makes a selection of the foreground and fills it with the proper color for the `Person` segmentation in deeplab: `RGB(192,128,128)` 
-  * Exports the image as a 60% quality jpeg.
+* Takes the transparent images and resizes the canvas to match the dimensions of your chosen background image.
+* Aligns the transparent foreground image to the bottom center of the canvas.
+* Makes a background and fills it with black (the segmentation color for `background` in deeplab)
+* Makes a selection of the foreground and fills it with the proper color for the `Person` segmentation in deeplab: `RGB(192,128,128)` 
+* Exports the image as a 60% quality jpeg.
 
-  Make sure to edit the action to specify the desired color segmentation for your images, if you are not trying to identify people in your photos. You can see the deeplab (resnet) [color segmentation scheme here](https://github.com/DrSleep/tensorflow-deeplab-resnet/blob/master/images/colour_scheme.png).
+Make sure to edit the action to specify the desired color segmentation for your images, if you are not trying to identify people in your photos. You can see the deeplab (resnet) [color segmentation scheme here](https://github.com/DrSleep/tensorflow-deeplab-resnet/blob/master/images/colour_scheme.png).
 
 
 
 * `convert_to_indexed` - You do not have to run this action if you used the `segment` action above. 
 
-  However, if you already have images, this action just ensures that the color for the segmentation mask is exact, forcing a `pink-ish` color to the exact pixel values. Photoshop, for example, does some adjustment of colors on a normal save to match your screen's color profile.  You can prevent having to run this action at all if saving from photoshop by ensuring that the `convert to sRGB` option in the `save for web` dialog is unchecked.
+However, if you already have images, this action just ensures that the color for the segmentation mask is exact, forcing a `pink-ish` color to the exact pixel values. Photoshop, for example, does some adjustment of colors on a normal save to match your screen's color profile.  You can prevent having to run this action at all if saving from photoshop by ensuring that the `convert to sRGB` option in the `save for web` dialog is unchecked.
 
 
 
 * `merge_segmentation` - this action does not need to be run until after all of your model training and image generation has been done. Essentially it is the last step, helping you to visualize how well your machine-learning generated masks actually mask off your subject. It does the following:
 
-  * Adds both the regular image and the segmentation masks as layers
-  * Selects the color range matching the segmentation layer
-  * Makes a mask around the regular image
+* Adds both the regular image and the segmentation masks as layers
+* Selects the color range matching the segmentation layer
+* Makes a mask around the regular image
 
-  You end up with 3 layers - one with the untouched photo, one with the segmentation mask, and one with your regular image masked off to show how well the background was removed and the subjects were isolated.
+You end up with 3 layers - one with the untouched photo, one with the segmentation mask, and one with your regular image masked off to show how well the background was removed and the subjects were isolated.
 
 
 
@@ -285,8 +283,8 @@ Before running, make sure to edit the following:
 ```
 # palette (color map) describes the (R, G, B): Label pair
 palette = {(0,   0,   0) : 0 , #background
-         (192,  128, 128) : 1 #person
-         }
+   (192,  128, 128) : 1 #person
+   }
 ```
 
 If you are not processing people, the palette should contain all of the segmentation colors you are trying to detect. In our case, since we are just looking for people, the palette contains black for the background as index 0, and pink for the foreground as index 1.
@@ -325,23 +323,23 @@ Edit the `build_pqr_data.py` file, and make sure there is a flag for our model's
 
 ```python
 tf.app.flags.DEFINE_string('image_folder',
-                           './PQR/JPEGImages',
-                           'Folder containing images.')
+                     './PQR/JPEGImages',
+                     'Folder containing images.')
 
 tf.app.flags.DEFINE_string(
-    'semantic_segmentation_folder',
-    './PQR/SegmentationClassRaw',
-    'Folder containing semantic segmentation annotations.')
+'semantic_segmentation_folder',
+'./PQR/SegmentationClassRaw',
+'Folder containing semantic segmentation annotations.')
 
 tf.app.flags.DEFINE_string(
-    'list_folder',
-    './PQR/ImageSets',
-    'Folder containing lists for training and validation')
+'list_folder',
+'./PQR/ImageSets',
+'Folder containing lists for training and validation')
 
 tf.app.flags.DEFINE_string(
-    'output_dir',
-    './PQR/tfrecord',
-    'Path to save converted SSTable of TensorFlow examples.')
+'output_dir',
+'./PQR/tfrecord',
+'Path to save converted SSTable of TensorFlow examples.')
 ```
 
 
@@ -350,19 +348,19 @@ Make sure to change any of those directories to match where your files are locat
 
 ```python
 image_filename = os.path.join(
-            #MH:
-            #FLAGS.image_folder, filenames[i] + '.' + FLAGS.image_format)
-            FLAGS.image_folder, filenames[i] + '.jpg')
-            #END MH
+#MH:
+#FLAGS.image_folder, filenames[i] + '.' + FLAGS.image_format)
+FLAGS.image_folder, filenames[i] + '.jpg')
+#END MH
 ```
 
 and the output images to be `.png`
 
 ```python
 #MH:
-            #filenames[i] + '.' + FLAGS.label_format)
-            filenames[i] + '.png')
-            #END MH
+      #filenames[i] + '.' + FLAGS.label_format)
+      filenames[i] + '.png')
+      #END MH
 ```
 
 due to an issue I had with the script utilizing the `label_format` flag. You should change those extensions to match the extensions of your own images if they differ.
@@ -392,20 +390,20 @@ In `deprecated/segmentation_dataset.py` , look for the following (~Line 114):
 ```
 # MH
 _PQR_INFORMATION = DatasetDescriptor(
-    splits_to_sizes={
-        'train': 487,
-        'val': 101,
-        'trainval': 588,
-    },
-    num_classes=2,
-    ignore_label=255,
+splits_to_sizes={
+  'train': 487,
+  'val': 101,
+  'trainval': 588,
+},
+num_classes=2,
+ignore_label=255,
 )
 
 _DATASETS_INFORMATION = {
-    'cityscapes': _CITYSCAPES_INFORMATION,
-    'pascal_voc_seg': _PASCAL_VOC_SEG_INFORMATION,
-    'ade20k': _ADE20K_INFORMATION,
-    'pqr': _PQR_INFORMATION,
+'cityscapes': _CITYSCAPES_INFORMATION,
+'pascal_voc_seg': _PASCAL_VOC_SEG_INFORMATION,
+'ade20k': _ADE20K_INFORMATION,
+'pqr': _PQR_INFORMATION,
 }
 # END MH
 ```
@@ -436,21 +434,21 @@ Make sure your folder structure looks similar to this, if you followed all of th
 
 ```
 + PQR
-  + exp //contains exported files
-    + train_on_trainval_set
-      + eval //contains results of training evaluation
-      + init_models //contains the deeplab pascal training set, which you need to download
-      + train //contains training ckpt files
-      + vis
-        + segmentation_results //contains the generated segmentation masks
-  + Imagesets
-    train.txt
-    trainval.txt
-    val.txt
-  + logs
-  + tfrecord //holds your converted dataset
-  buid_pqr_data.py //creates your tfrecord files
-  convert_rgb_to_index.py //turns rgb images into their segmentation indices
++ exp //contains exported files
++ train_on_trainval_set
++ eval //contains results of training evaluation
++ init_models //contains the deeplab pascal training set, which you need to download
++ train //contains training ckpt files
++ vis
+  + segmentation_results //contains the generated segmentation masks
++ Imagesets
+train.txt
+trainval.txt
+val.txt
++ logs
++ tfrecord //holds your converted dataset
+buid_pqr_data.py //creates your tfrecord files
+convert_rgb_to_index.py //turns rgb images into their segmentation indices
 
 train-pqr.sh //holds the training script
 eval-pqr.sh //holds the eval script
@@ -493,21 +491,21 @@ mkdir -p "${TRAIN_LOGDIR}"
 
 NUM_ITERATIONS=9000
 python3 "${WORK_DIR}"/train.py \
-  --logtostderr \
-  --train_split="train" \
-  --model_variant="xception_65" \
-  --atrous_rates=6 \
-  --atrous_rates=12 \
-  --atrous_rates=18 \
-  --output_stride=16 \
-  --decoder_output_stride=4 \
-  --train_crop_size=1000,667 \
-  --train_batch_size=4 \
-  --training_number_of_steps="${NUM_ITERATIONS}" \
-  --fine_tune_batch_norm=true \
-  --tf_initial_checkpoint="${INIT_FOLDER}/deeplabv3_pascal_train_aug/model.ckpt" \
-  --train_logdir="${TRAIN_LOGDIR}" \
-  --dataset_dir="${DATASET}"
+--logtostderr \
+--train_split="train" \
+--model_variant="xception_65" \
+--atrous_rates=6 \
+--atrous_rates=12 \
+--atrous_rates=18 \
+--output_stride=16 \
+--decoder_output_stride=4 \
+--train_crop_size=1000,667 \
+--train_batch_size=4 \
+--training_number_of_steps="${NUM_ITERATIONS}" \
+--fine_tune_batch_norm=true \
+--tf_initial_checkpoint="${INIT_FOLDER}/deeplabv3_pascal_train_aug/model.ckpt" \
+--train_logdir="${TRAIN_LOGDIR}" \
+--dataset_dir="${DATASET}"
 ```
 
 Things you may want to change:
@@ -533,7 +531,7 @@ If you've set everything up properly, your machine should start training! This w
 
 
 
-![training](./readme_images/training.png)
+![training](https://prototypes.mikeheavers.com/transfer/deeplab/readme_images/training.png)
 
 
 
@@ -541,7 +539,7 @@ If you've set everything up properly, your machine should start training! This w
 
 Running `eval-pqr.sh` from the same directory will calculate the [`mean intersection over union`](https://www.jeremyjordan.me/evaluating-image-segmentation-models/) score for your model. Essentially, this will tell you the number of pixels in common between the actual mask and the prediction of your model:
 
-![iou](./readme_images/iou.jpg)
+![iou](https://prototypes.mikeheavers.com/transfer/deeplab/readme_images/iou.jpg)
 
 
 
@@ -620,7 +618,7 @@ replacebg_dd.py
 
 
 
- Before calling the script, check the following lines within the script:
+Before calling the script, check the following lines within the script:
 
 ```
 input_dir = 'input/'
@@ -675,7 +673,6 @@ When you run the script and it is displaying an image, you can use the following
 
 
 
-
 **NOTE:**
 
 This tutorial and repo were created through my difficulties installing and training deeplab, in the hopes that it would make things easier for others trying to do the same. Very little of the code is my own, and has been assembled from a variety of sources - all of which were extremely helpful, but none of which I was able to follow on their own in order to successfully train Deeplab. By combining various pieces of the following links, I was able to create a process that worked smoothly for me. 
@@ -695,4 +692,5 @@ This tutorial and repo were created through my difficulties installing and train
 [Free Code Camp](https://medium.com/free-code-camp/how-to-use-deeplab-in-tensorflow-for-object-segmentation-using-deep-learning-a5777290ab6b) - *How to use DeepLab in TensorFlow for object segmentation using Deep Learning*, Beeren Sahu
 
 [Dataset Utils](https://github.com/ml4a/ml4a-guides/tree/master/utils) - Gene Kogan - useful in scraping images for a dataset and creating randomly sized, scaled, and flipped images in order to increase the training set size.
+
 
