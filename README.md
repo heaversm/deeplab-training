@@ -186,7 +186,7 @@ To use your own parameters, do an advanced google search for the type of images 
 You then run the scraper as follows:
 
 ```bash
-python3 scrape/scrapeImages.py --search "[your_search_term]" --num_images 100 --directory "/[Path]/[to]/[your]/[image]/[folder]"
+python3 utilities/scrapeImages.py --search "[your_search_term]" --num_images 100 --directory "/[Path]/[to]/[your]/[image]/[folder]"
 ```
 
 Changing `[your_search_term]` and the value of the `--directory` flag to where you want to save images to. 
