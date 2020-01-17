@@ -1,0 +1,4 @@
+scrape/
+models/research/deeplab/*
+models/research/slim/*
+*.bak
