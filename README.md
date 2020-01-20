@@ -428,31 +428,30 @@ You're finally ready to train!
 
 **Folder Structure**
 
-Make sure your folder structure looks similar to this, if you followed all of the naming conventions in the above steps:
-
+Make sure your folder structure from `/datasets` looks similar to this, if you followed all of the naming conventions in the above steps:
 
 
 ```
 + PQR
-+ exp //contains exported files
-+ train_on_trainval_set
-+ eval //contains results of training evaluation
-+ init_models //contains the deeplab pascal training set, which you need to download
-+ train //contains training ckpt files
-+ vis
-  + segmentation_results //contains the generated segmentation masks
-+ Imagesets
-train.txt
-trainval.txt
-val.txt
-+ logs
-+ tfrecord //holds your converted dataset
+  + exp //contains exported files
+  + train_on_trainval_set
+  + eval //contains results of training evaluation
+  + init_models //contains the deeplab pascal training set, which you need to download
+  + train //contains training ckpt files
+  + vis
+    + segmentation_results //contains the generated segmentation masks
+  + Imagesets
+    train.txt
+    trainval.txt
+    val.txt
+  + logs
+  + tfrecord //holds your converted dataset
 buid_pqr_data.py //creates your tfrecord files
 convert_rgb_to_index.py //turns rgb images into their segmentation indices
 
-train-pqr.sh //holds the training script
-eval-pqr.sh //holds the eval script
-vis-pqr.sh //holds the visualization script
+../../train-pqr.sh //holds the training script
+../../eval-pqr.sh //holds the eval script
+../../vis-pqr.sh //holds the visualization script
 ```
 
 

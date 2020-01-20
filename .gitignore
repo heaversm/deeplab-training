@@ -2,3 +2,4 @@ scrape/
 models/research/deeplab/*
 models/research/slim/*
 *.bak
+!models/research/deeplab/input_preprocess.py
