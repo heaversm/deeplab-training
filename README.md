@@ -46,7 +46,9 @@ You will only need the `models/research/deeplab` and `models/research/slim` dire
 
 **Merge the files from the tutorial repo into the tensorflow models repo**
 
-[Clone or download this repo](https://github.com/heaversm/deeplab-training), and put everything into the directory you just created for the tensorflow models repo. but don't overwrite anything. For example put `models/research/eval-pqr.sh` into the tensorflow `models/research` directory
+[Clone or download this repo](https://github.com/heaversm/deeplab-training), and put everything into the directory you just created for the tensorflow models repo. but don't overwrite anything *except the `input_preprocess.py` file in the `/deeplab/` directory, which has a small change. 
+
+For example put `models/research/eval-pqr.sh` into the tensorflow `models/research` directory.
 
 
 
