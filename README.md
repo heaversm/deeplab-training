@@ -4,6 +4,8 @@
 
 **TLDR**: This tutorial covers how to set up Deeplab within Tensorflow to train your own machine learning model, with a focus on separating humans from the background of a photograph in order to perform background replacement. 
 
+If you'd rather watch this on Youtube, see the [deeplab training tutorial here](https://youtu.be/3NMNP_1d1s8), and the [openCV visualization / background swapping tutorial here](https://youtu.be/4MmFuYoDySQ)
+
 There are 3 parts to the tutorial. Feel free to skip to the section that is most relevant to you.
 
 * Part 1 focuses on collecting a dataset. 
